@@ -1,24 +1,25 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DoNotModify;
 using BehaviorDesigner.Runtime;
 using System.Linq;
 
-namespace Actarus {
-
-    
+namespace Actarus
+{
     public class ActarusController : BaseSpaceShipController
     {
         public struct Sector
         {
             public Vector2 zone;
             public List<WayPointView> pointList;
-            public int pointMineCount;
-            public int mineCount;
+            public float range;
+            public int key;
         }
 
         Sector[] sectors = new Sector[4];
+        private int sectorindex;
         BehaviorTree BT;
         Camera cameraPoint;
         public override void Initialize(SpaceShipView spaceship, GameData data)
@@ -29,12 +30,15 @@ namespace Actarus {
 
         public override InputData UpdateInput(SpaceShipView spaceship, GameData data)
         {
-            CheckSector(spaceship, data);
             //BT.SetVariableValue("speed", spaceship.Velocity.magnitude);
+            bool canGoTo = (bool)BT.GetVariable("canGoTo").GetValue();
+
+            CheckSector(spaceship,canGoTo);
+
             SpaceShipView otherSpaceship = data.GetSpaceShipForOwner(1 - spaceship.Owner);
             float thrust = 1.0f;
             float targetOrient = spaceship.Orientation;
-            float distance = Vector2.Distance(spaceship.Position, data.SpaceShips.Select(x => x.Position).OrderBy(x=> Vector2.Distance(x,spaceship.Position)).Last());
+            float distance = Vector2.Distance(spaceship.Position, data.SpaceShips.Select(x => x.Position).OrderBy(x => Vector2.Distance(x, spaceship.Position)).Last());
             bool canshoot = distance <= spaceship.Radius;
             //BT.SetVariableValue("canshoot", canshoot);
 
@@ -59,7 +63,7 @@ namespace Actarus {
             {
                 for (int i = 0; i < data.WayPoints.Count; i++)
                 {
-                    if(Vector2.Distance(sectors[a].zone, data.WayPoints[i].Position) <= 5.5f / 2f)
+                    if (Vector2.Distance(sectors[a].zone, data.WayPoints[i].Position) <= sectors[a].range)
                     {
                         sectors[a].pointList.Add(data.WayPoints[i]);
                     }
@@ -67,30 +71,48 @@ namespace Actarus {
             }
         }
 
-        public void CheckSector(SpaceShipView spaceship, GameData data)
+        static int GetSpecificSectorBindPoint(SpaceShipView spaceship, Sector sector)
         {
-            for (int a = 0; a < sectors.Length; a++)
+            int bindcount = 0;
+            for (int j = 0; j < sector.pointList.Count; j++)
             {
-                sectors[a].pointMineCount = 0;
-                for (int i = 0; i < sectors[a].pointList.Count; i++)
+                if (sector.pointList[j].Owner != spaceship.Owner)
                 {
-                    if (sectors[a].pointList[i].Owner == spaceship.Owner)
-                    {
-                        ++sectors[a].pointMineCount;
-                    }
+                    bindcount++;
+                    sector.key = bindcount;
                 }
             }
+            return bindcount;
+        }
 
+        public void CheckSector(SpaceShipView spaceship,bool OnSector)
+        {
+            List<int> bindpoints = new List<int>();
+            for (int i = 0; i < sectors.Length; i++)
+            {
+                bindpoints.Add(GetSpecificSectorBindPoint(spaceship, sectors[i]));
+            }
 
+            sectorindex = Array.IndexOf(sectors, sectors.First(i => i.key == bindpoints.Max()));
+            if (OnSector)
+            {
+                WayPointView wayPoint = sectors[sectorindex].pointList
+                    .OrderBy(i => Vector2.Distance(spaceship.Position, i.Position)).First();
+                GoTo(wayPoint, spaceship);
+            }
+        }
 
+        static void GoTo(WayPointView wayPoint, SpaceShipView spaceShip)
+        {
+            spaceShip.LookAt.Set(wayPoint.Position.x, wayPoint.Position.y);
         }
 
         void OnDrawGizmos()
         {
-            Gizmos.DrawLine(new Vector3(-cameraPoint.orthographicSize*2, cameraPoint.aspect*2.5f, 0f), new Vector3(0f, cameraPoint.aspect*2.5f, 0f));
-            Gizmos.DrawLine(new Vector3(0f, cameraPoint.aspect*2.5f, 0f), new Vector3(0f, 0f, 0f));
-            Gizmos.DrawLine(new Vector3(-cameraPoint.orthographicSize*2, 0f, 0f), new Vector3(0f, 0f, 0f));
-            Gizmos.DrawLine(new Vector3(-cameraPoint.orthographicSize*2, 0f, 0f), new Vector3(-cameraPoint.orthographicSize*2, cameraPoint.aspect*2.5f, 0f));
+            Gizmos.DrawLine(new Vector3(-cameraPoint.orthographicSize * 2, cameraPoint.aspect * 2.5f, 0f), new Vector3(0f, cameraPoint.aspect * 2.5f, 0f));
+            Gizmos.DrawLine(new Vector3(0f, cameraPoint.aspect * 2.5f, 0f), new Vector3(0f, 0f, 0f));
+            Gizmos.DrawLine(new Vector3(-cameraPoint.orthographicSize * 2, 0f, 0f), new Vector3(0f, 0f, 0f));
+            Gizmos.DrawLine(new Vector3(-cameraPoint.orthographicSize * 2, 0f, 0f), new Vector3(-cameraPoint.orthographicSize * 2, cameraPoint.aspect * 2.5f, 0f));
         }
     }
 
