@@ -16,7 +16,7 @@ namespace Actarus {
         {
             SpaceShipView otherSpaceship = data.GetSpaceShipForOwner(1 - spaceship.Owner);
             float thrust = 1.0f;
-            float targetOrient = spaceship.Orientation + 90.0f;
+            float targetOrient = spaceship.Orientation;
             bool needShoot = AimingHelpers.CanHit(spaceship, otherSpaceship.Position, otherSpaceship.Velocity, 0.15f);
             return new InputData(thrust, targetOrient, needShoot, false, false);
         }

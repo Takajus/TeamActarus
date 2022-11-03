@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 995883328052245445}
-  - component: {fileID: 6962921054947994555}
+  - component: {fileID: -571347284944157138}
   - component: {fileID: 3039252958360588374}
   m_Layer: 0
-  m_Name: Actarus TeamController
+  m_Name: ExampleTeamController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6962921054947994555
+--- !u!114 &-571347284944157138
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,7 +42,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7672329417856911656}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 475474c793411c141b86d28f8284abce, type: 3}
+  m_Script: {fileID: 11500000, guid: fdba0d4591abbc747bb956b0dac32435, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &3039252958360588374
