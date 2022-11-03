@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: -571347284944157138}
   - component: {fileID: 3039252958360588374}
   m_Layer: 0
-  m_Name: ExampleTeamController
+  m_Name: ActarusTeamController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,8 @@ MonoBehaviour:
       JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(315.5,30)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Repeater","NodeData":{"Offset":"(1,129)"},"ID":1,"Name":"Repeater","Instant":true,"SharedIntcount":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"","Int32mValue":0},"SharedBoolrepeatForever":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"","BooleanmValue":true},"SharedBoolendOnFailure":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"","BooleanmValue":false},"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(3,137)"},"ID":2,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"IIM.ModifyInt","NodeData":{"Offset":"(-260,115)"},"ID":3,"Name":"Modify
         Int","Instant":true,"SharedIntvariable":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"Test","IsShared":true,"Int32mValue":0},"OPERATORop":"ADD","SharedIntvalue":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"","Int32mValue":1}},{"Type":"IIM.ModifyInt","NodeData":{"Offset":"(-121,124)"},"ID":4,"Name":"Modify
         Int","Instant":true,"SharedIntvariable":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"","Int32mValue":0},"OPERATORop":"MODULO","SharedIntvalue":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"","Int32mValue":3}},{"Type":"BehaviorDesigner.Runtime.Tasks.Wait","NodeData":{"Offset":"(21,117)"},"ID":5,"Name":"Wait","Instant":true,"SharedFloatwaitTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"","SinglemValue":0.5},"SharedBoolrandomWait":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"","BooleanmValue":false},"SharedFloatrandomWaitMin":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"","SinglemValue":1},"SharedFloatrandomWaitMax":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"","SinglemValue":1}},{"Type":"IIM.CompareInt","NodeData":{"Offset":"(160,120)"},"ID":6,"Name":"Compare
-        Int","Instant":true,"SharedIntvariable":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"Test","IsShared":true,"Int32mValue":0},"OPERATORop":"EQUAL","SharedIntcompareTo":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"","Int32mValue":0}}]}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"Test","IsShared":true,"Int32mValue":0}]}'
+        Int","Instant":true,"SharedIntvariable":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"Test","IsShared":true,"Int32mValue":0},"OPERATORop":"EQUAL","SharedIntcompareTo":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"","Int32mValue":0}}]}]},"DetachedTasks":[{"Type":"IIM.CompareFloat","NodeData":{"Offset":"(-44.38385,304.418762)"},"ID":7,"Name":"Compare
+        Float","Instant":true,"SharedFloatvariable":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"distanceToEnemy","IsShared":true,"SinglemValue":0},"OPERATORop":"LOWER","SharedFloatcompareTo":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1}}],"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"Test","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"distanceToEnemy","IsShared":true,"SinglemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"outFire","IsShared":true,"BooleanmValue":false}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 
