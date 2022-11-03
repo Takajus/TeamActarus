@@ -4,15 +4,9 @@ using BehaviorDesigner.Runtime.Tasks;
 namespace Actarus
 {
 	[TaskCategory("Actarus")]
-	public class Fire : Action
+	public class Fire : ActarusAction
 	{
-		ActarusController AC;
-		public override void OnAwake()
-        {
-			AC = gameObject.GetComponent<ActarusController>();
-        }
-
-		public override TaskStatus OnUpdate()
+        public override TaskStatus OnUpdate()
 		{
 			this.Owner.SetVariableValue("outFire", true);
 			return TaskStatus.Success;
