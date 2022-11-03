@@ -29,6 +29,11 @@ namespace Actarus {
             
             return new InputData(thrust, targetOrient, canshoot, false, false);
         }
+
+        static void GoTo(WayPoint wayPoint , SpaceShipView spaceShip)
+        {
+            spaceShip.LookAt.Set(wayPoint.Position.x,wayPoint.Position.y);
+        }
     }
 
 }
