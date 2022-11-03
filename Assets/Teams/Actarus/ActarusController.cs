@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Actarus {
 
-    public class Actarus : BaseSpaceShipController
+    public class ActarusController : BaseSpaceShipController
     {
 
         BehaviorTree BT;
@@ -23,11 +23,16 @@ namespace Actarus {
             float thrust = 1.0f;
             float targetOrient = spaceship.Orientation;
             float distance = Vector2.Distance(spaceship.Position, data.SpaceShips.Select(x => x.Position).OrderBy(x=> Vector2.Distance(x,spaceship.Position)).Last());
-            bool needShoot = AimingHelpers.CanHit(spaceship, otherSpaceship.Position, otherSpaceship.Velocity, 0.15f);
-            bool canshoot = distance <= spaceship.Radius && needShoot;
+            bool canshoot = distance <= spaceship.Radius;
             BT.SetVariableValue("canshoot", canshoot);
-            
-            return new InputData(thrust, targetOrient, canshoot, false, false);
+
+            //Recupération de variable ET LE RESET !!!!
+            bool atire = (bool)BT.GetVariable("outFire").GetValue();
+            BT.SetVariableValue("outFire", false);
+
+
+            bool needShoot = AimingHelpers.CanHit(spaceship, otherSpaceship.Position, otherSpaceship.Velocity, 0.15f);
+            return new InputData(thrust, targetOrient, needShoot, false, false);
         }
     }
 
