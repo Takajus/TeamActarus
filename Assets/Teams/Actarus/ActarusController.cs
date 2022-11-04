@@ -10,7 +10,7 @@ namespace Actarus
 {
     public class ActarusController : BaseSpaceShipController
     {
-        public struct Sector
+        public class Sector
         {
             public Vector2 zone;
             public List<WayPointView> pointList;
@@ -18,7 +18,8 @@ namespace Actarus
             public int key;
         }
 
-        Sector[] sectors = new Sector[4];
+        private float orient = 0f;
+    private  Sector[] sectors = new Sector[4];
         private int sectorindex;
         BehaviorTree BT;
         Camera cameraPoint;
@@ -33,7 +34,7 @@ namespace Actarus
             //BT.SetVariableValue("speed", spaceship.Velocity.magnitude);
             bool canGoTo = (bool)BT.GetVariable("canGoTo").GetValue();
 
-            CheckSector(spaceship,canGoTo);
+            CheckSector(spaceship,true);
 
             SpaceShipView otherSpaceship = data.GetSpaceShipForOwner(1 - spaceship.Owner);
             float thrust = 1.0f;
@@ -48,19 +49,28 @@ namespace Actarus
 
 
             bool needShoot = AimingHelpers.CanHit(spaceship, otherSpaceship.Position, otherSpaceship.Velocity, 0.15f);
-            return new InputData(thrust, targetOrient, needShoot, false, false);
+            return new InputData(thrust, orient, needShoot, false, false);
         }
 
         public void DefineSector(GameData data)
         {
             cameraPoint = FindObjectOfType<Camera>();
+            sectors[0] = new Sector();
+            sectors[1] = new Sector();
+            sectors[2] = new Sector();
+            sectors[3] = new Sector();
             sectors[0].zone = new Vector2(cameraPoint.gameObject.transform.position.x - 2f * cameraPoint.orthographicSize, cameraPoint.gameObject.transform.position.y + 2.5f * cameraPoint.aspect);
+            sectors[1].range = 20f;
+            sectors[0].range = 20f;
+            sectors[2].range = 20f;
+            sectors[3].range = 20f;
             sectors[1].zone = new Vector2(cameraPoint.gameObject.transform.position.x + 2f * cameraPoint.orthographicSize, cameraPoint.gameObject.transform.position.y + 2.5f * cameraPoint.aspect);
             sectors[2].zone = new Vector2(cameraPoint.gameObject.transform.position.x - 2f * cameraPoint.orthographicSize, cameraPoint.gameObject.transform.position.y - 2.5f * cameraPoint.aspect);
             sectors[3].zone = new Vector2(cameraPoint.gameObject.transform.position.x + 2f * cameraPoint.orthographicSize, cameraPoint.gameObject.transform.position.y - 2.5f * cameraPoint.aspect);
 
             for (int a = 0; a < sectors.Length; a++)
             {
+                sectors[a].pointList = new List<WayPointView>();
                 for (int i = 0; i < data.WayPoints.Count; i++)
                 {
                     if (Vector2.Distance(sectors[a].zone, data.WayPoints[i].Position) <= sectors[a].range)
@@ -102,9 +112,9 @@ namespace Actarus
             }
         }
 
-        static void GoTo(WayPointView wayPoint, SpaceShipView spaceShip)
-        {
-            spaceShip.LookAt.Set(wayPoint.Position.x, wayPoint.Position.y);
+         void GoTo(WayPointView wayPoint, SpaceShipView spaceShip)
+        { 
+            orient = AimingHelpers.ComputeSteeringOrient(spaceShip,wayPoint.Position);
         }
 
         void OnDrawGizmos()
