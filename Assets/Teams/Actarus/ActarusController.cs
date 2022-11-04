@@ -23,6 +23,8 @@ namespace Actarus
         private int sectorindex;
         BehaviorTree BT;
         Camera cameraPoint;
+        WayPointView currentWaypoint;
+        private bool dropMine;
         public override void Initialize(SpaceShipView spaceship, GameData data)
         {
             BT = GetComponent<BehaviorTree>();
@@ -49,7 +51,7 @@ namespace Actarus
 
 
             bool needShoot = AimingHelpers.CanHit(spaceship, otherSpaceship.Position, otherSpaceship.Velocity, 0.15f);
-            return new InputData(thrust, orient, needShoot, false, false);
+            return new InputData(thrust, orient, needShoot, dropMine, false);
         }
 
         public void DefineSector(GameData data)
@@ -114,12 +116,20 @@ namespace Actarus
             {
                 bindpoints.Add(GetSpecificSectorBindPoint(spaceship, sectors[i]));
             }
-
+            dropMine = false;
             sectorindex = Array.IndexOf(sectors, sectors.First(i => i.key == bindpoints.Max()));
             if (OnSector)
             {
                 WayPointView wayPoint = sectors[sectorindex].pointList
                     .OrderBy(i => Vector2.Distance(spaceship.Position, i.Position)).First(i=> i.Owner != spaceship.Owner);
+                if (currentWaypoint != null)
+                {
+                    if(currentWaypoint.Owner == spaceship.Owner)
+                    {
+                        dropMine = true;
+                    }
+                }
+                currentWaypoint = wayPoint;
                 GoTo(wayPoint, spaceship);
             }
         }
