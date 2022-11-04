@@ -19,7 +19,7 @@ namespace Actarus
         }
 
         private float orient = 0f;
-    private  Sector[] sectors = new Sector[4];
+        private Sector[] sectors = new Sector[4];
         private int sectorindex;
         BehaviorTree BT;
         Camera cameraPoint;
@@ -34,7 +34,7 @@ namespace Actarus
             //BT.SetVariableValue("speed", spaceship.Velocity.magnitude);
             bool canGoTo = (bool)BT.GetVariable("canGoTo").GetValue();
 
-            CheckSector(spaceship,true);
+            CheckSector(spaceship, true);
 
             SpaceShipView otherSpaceship = data.GetSpaceShipForOwner(1 - spaceship.Owner);
             float thrust = 1.0f;
@@ -84,18 +84,30 @@ namespace Actarus
         static int GetSpecificSectorBindPoint(SpaceShipView spaceship, Sector sector)
         {
             int bindcount = 0;
-            for (int j = 0; j < sector.pointList.Count; j++)
+            bool allpointTake = true;
+            for (int i = 0; i < sector.pointList.Count; i++)
             {
-                if (sector.pointList[j].Owner != spaceship.Owner)
+                if (sector.pointList[i].Owner != spaceship.Owner)
                 {
-                    bindcount++;
-                    sector.key = bindcount;
+                    allpointTake = false;
                 }
             }
+            if (!allpointTake)
+            {
+                for (int j = 0; j < sector.pointList.Count; j++)
+                {
+                    if (sector.pointList[j].Owner != spaceship.Owner)
+                    {
+                        bindcount++;
+                    }
+                }
+            }
+
+            sector.key = bindcount;
             return bindcount;
         }
 
-        public void CheckSector(SpaceShipView spaceship,bool OnSector)
+        public void CheckSector(SpaceShipView spaceship, bool OnSector)
         {
             List<int> bindpoints = new List<int>();
             for (int i = 0; i < sectors.Length; i++)
@@ -107,14 +119,14 @@ namespace Actarus
             if (OnSector)
             {
                 WayPointView wayPoint = sectors[sectorindex].pointList
-                    .OrderBy(i => Vector2.Distance(spaceship.Position, i.Position)).First();
+                    .OrderBy(i => Vector2.Distance(spaceship.Position, i.Position)).First(i=> i.Owner != spaceship.Owner);
                 GoTo(wayPoint, spaceship);
             }
         }
 
-         void GoTo(WayPointView wayPoint, SpaceShipView spaceShip)
-        { 
-            orient = AimingHelpers.ComputeSteeringOrient(spaceShip,wayPoint.Position);
+        void GoTo(WayPointView wayPoint, SpaceShipView spaceShip)
+        {
+            orient = AimingHelpers.ComputeSteeringOrient(spaceShip, wayPoint.Position);
         }
 
         void OnDrawGizmos()
